@@ -90,15 +90,16 @@ app.delete('/boards/:id', async (req, res) => {
 })
 
 app.post('/boards/:id/cards', async (req, res) => {
-    const { message, imgUrl, author, boardId } = req.body;
+    const {id} = req.params;
+    const { messsage, imgUrl, author} = req.body; 
     console.log(req.body);
     try {
         const newCard = await prisma.kudoCard.create({
             data: {
-                message,    // Correct field name
+                messsage,    // TO DO: Correct field name
                 imgUrl,
                 author,
-                board: { connect: { id: parseInt(boardId) } },
+                board: { connect: { id: parseInt(id) } },
             }
         });
         res.status(201).json(newCard);

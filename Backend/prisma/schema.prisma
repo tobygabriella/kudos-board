@@ -24,10 +24,10 @@ model KudoBoard{
 
 model KudoCard{
   id Int @id @default(autoincrement())
-  message String
+  messsage String
   imgUrl String
   author String
-  board KudoBoard @relation(fields:[boardId], references:[id])
   boardId Int
+  board KudoBoard @relation(fields:[boardId], references:[id], onDelete: Cascade)
 }
 
