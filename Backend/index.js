@@ -29,8 +29,8 @@ app.post('/boards', async (req, res) => {
               imgUrl:imageUrl
             }
     })
-    res.status(201).json(newBoard); 
-    }   
+    res.status(201).json(newBoard);
+    }
     catch (error) {
         console.error('Error fetching Giphy data:', error);
         res.status(500).json({ error: 'Failed to create board with Giphy image' });
@@ -48,7 +48,7 @@ app.get('/boards/:id', async (req, res) => {
 
 app.get('/boards/category/:category', async (req, res) => {
     const { category } = req.params;
-    
+
     try {
         const boards = await prisma.kudoBoard.findMany({
             where: {
@@ -83,15 +83,17 @@ app.delete('/boards/:id', async (req, res) => {
     const { id } = req.params
     const deleteBoard = await prisma.kudoBoard.delete(
         {
-             where: {id:(parseInt(id))}, 
+             where: {id:(parseInt(id))},
         })
 
     res.status(200).json(deleteBoard);
 })
 
+
+
 app.post('/boards/:id/cards', async (req, res) => {
     const {id} = req.params;
-    const { messsage, imgUrl, author} = req.body; 
+    const { messsage, imgUrl, author} = req.body;
     console.log(req.body);
     try {
         const newCard = await prisma.kudoCard.create({
@@ -121,6 +123,20 @@ app.get('/boards/:id/cards', async (req, res) => {
         res.status(500).send('Error fetching cards');
     }
 });
+
+app.delete('/cards/:id', async (req, res) => {
+    try {
+        const { id } = req.params;
+        const deleteCard = await prisma.kudoCard.delete({
+            where: { id: parseInt(id) }
+        });
+        res.status(200).json(deleteCard);
+    } catch (err) {
+        console.error('Error deleting card:', err);
+        res.status(500).json({ error: 'Internal Server Error' });
+    }
+});
+
 
 app.listen(port, ()=>{
     console.log(`Server is running at port ${port}`)

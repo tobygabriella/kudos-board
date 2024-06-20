@@ -3,11 +3,11 @@ import { Link } from 'react-router-dom';
 
 const KudosBoard= ({  id, title, category, imageUrl, onDelete }) => {
   return (
-    <div className="kudosCard">
-      <img src={imageUrl} alt={title} className="kudosCardImage" />
-      <h3 className="kudosCardTitle">{title}</h3>
-      <p className="kudosCardCategory">{category}</p>
-      <div className="kudosCardButtons">
+    <div className="kudosBoard">
+      <img src={imageUrl} alt={title} className="kudosBoardImage" />
+      <h3 className="kudosBoardTitle">{title}</h3>
+      <p className="kudosBoardCategory">{category}</p>
+      <div className="kudosBoardButtons">
         <Link to={`/boards/${id}`} className="viewButton" >View Board</Link>
         <button className="deleteButton" onClick={onDelete}>Delete Board</button>
       </div>

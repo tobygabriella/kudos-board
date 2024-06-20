@@ -2,6 +2,8 @@ import React, { useEffect, useState } from 'react';
 import { useParams, Link  } from 'react-router-dom';
 import './BoardPage.css';
 import CreateCardForm from './CreateCardForm';
+import KudoCard from './KudoCard';
+
 
 const BoardPage = () => {
   const { id } = useParams();
@@ -40,8 +42,8 @@ const BoardPage = () => {
     setShowCreateForm(false);
   };
 
-  const fetchCards = (boardId) => {
-    fetch(`${import.meta.env.VITE_BACKEND_ADDRESS}/boards/${boardId}/cards`)
+  const fetchCards = () => {
+    fetch(`${import.meta.env.VITE_BACKEND_ADDRESS}/boards/${id}/cards`)
       .then(response => response.json())
       .then(data => setCards(data))
       .catch(error => console.error('Error fetching cards:', error));
@@ -51,23 +53,48 @@ const BoardPage = () => {
     return <div>Loading...</div>;
   }
 
+  const handleDeleteCard = (id) => {
+    fetch(`${import.meta.env.VITE_BACKEND_ADDRESS}/cards/${id}`, {
+      method: "DELETE",
+      headers:{
+        "Content-Type": "application/json",
+      },
+    })
+      .then(response => {
+        if (response.ok) {
+          setCards(cards.filter(card => card.id !== id));
+        } else {
+          console.error('Error deleting board:', response.status);
+        }
+      })
+      .then(data => {
+        fetchCards();
+      })
+      .catch(error => {
+        console.error('Error deleting board:', error);
+      });
+  };
+
+  const cardBox = cards.map(card => {
+    return (
+    <KudoCard
+      key={card.id}
+      id={card.id}
+      boardId ={card.boardId}
+      imageUrl={card.imgUrl}
+      message={card.message}
+      author= {card.author}
+      onDelete={() => handleDeleteCard(card.id)}
+      />)
+  })
+
   return (
     <div className="board-page">
       <Link to="/" className="back-button">&lt;</Link>
       <h1 className="board-title">{board.title}</h1>
       <button className="create-card-button" onClick={() => setShowCreateForm(true)}>Create a Card</button>
       <div className="cards-container">
-        {cards.map(card => (
-          <div key={card.id} className="card">
-            <img src={card.imgUrl} alt={card.message} className="card-image" />
-            <p className="card-message">{card.message}</p>
-            <p className="card-author">{card.author}</p>
-            <div className="card-actions">
-              <button className="upvote-button">Upvote</button>
-              <button className="delete-button">Delete</button>
-            </div>
-          </div>
-        ))}
+        {cardBox}
       </div>
       {showCreateForm && (
         <CreateCardForm

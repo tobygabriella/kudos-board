@@ -7,9 +7,9 @@ const CreateCardForm = ({boardId,  onClose, onCreate }) => {
   const [owner, setOwner] = useState('');
   const [searchQuery, setSearchQuery] = useState('');
   const [message, setMessage] = useState('');
-//   const [gifs, setGifs] = useState([]);
-//   const [selectedGif, setSelectedGif] = useState('');
-  
+  const [gifs, setGifs] = useState([]);
+  const [selectedGif, setSelectedGif] = useState('');
+
 //   const handleSearch = (searchQuery) => {
 //     fetch(`https://api.giphy.com/v1/gifs/search?api_key=${import.meta.env.VITE_GIPHY_API_KEY}&q=${searchQuery}&limit=10`)
 //       .then(response => response.json())

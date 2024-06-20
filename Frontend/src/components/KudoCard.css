@@ -1,4 +1,4 @@
-.kudosBoard {
+.kudosCard {
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -12,25 +12,25 @@
     text-align: center;
   }
 
-  .kudosBoardImage {
+  .kudosCardImage {
     width: 100%;
     height: auto;
     border-radius: 4px;
     margin-bottom: 15px;
   }
 
-  .kudosBoardTitle {
+  .kudosCardAuthor {
     font-size: 18px;
     margin: 10px 0;
   }
 
-  .kudosBoardCategory {
+  .kudosCardMessage {
     font-size: 14px;
     color: #666;
     margin-bottom: 15px;
   }
 
-  .kudosBoardButtons {
+  .kudosCardButtons {
     display: flex;
     gap: 10px;
   }
