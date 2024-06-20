@@ -19,7 +19,7 @@ const BoardPage = () => {
   }, [id]);
 
   const handleCreateCard = (newCard) => {
-    fetch(`${import.meta.env.VITE_BACKEND_ADDRESS}/cards`, {
+    fetch(`${import.meta.env.VITE_BACKEND_ADDRESS}/boards/${id}/cards`, {
         method: 'POST',
         headers: {
           "Content-Type": "application/json",
@@ -51,31 +51,33 @@ const BoardPage = () => {
     return <div>Loading...</div>;
   }
 
-
-
   return (
     <div className="board-page">
-    <Link to="/" className="back-button">&lt;</Link>
-    <h1 className="board-title">{board.title}</h1>
-    <div className="board-content">
-      <img src={board.imgUrl} alt={board.title} className="board-image" />
-      <div className="board-details">
-        <p className="board-category">{board.category}</p>
-        <p className="board-author">{board.author}</p>
-        <button className="create-card-button" onClick={() => setShowCreateForm(true)}>Create a Card</button>
-      </div>
-    </div>
-    <div className="cards-container">
+      <Link to="/" className="back-button">&lt;</Link>
+      <h1 className="board-title">{board.title}</h1>
+      <button className="create-card-button" onClick={() => setShowCreateForm(true)}>Create a Card</button>
+      <div className="cards-container">
         {cards.map(card => (
           <div key={card.id} className="card">
-            <p>{card.messsage}</p>
-            <img src={card.imgUrl} alt={card.messsage} />
-            <p>{card.author}</p>
+            <img src={card.imgUrl} alt={card.message} className="card-image" />
+            <p className="card-message">{card.message}</p>
+            <p className="card-author">{card.author}</p>
+            <div className="card-actions">
+              <button className="upvote-button">Upvote</button>
+              <button className="delete-button">Delete</button>
+            </div>
           </div>
         ))}
       </div>
-    {showCreateForm && <CreateCardForm onClose={() => setShowCreateForm(false)} boardId={id} onCreate={handleCreateCard} />}
-  </div>
+      {showCreateForm && (
+        <CreateCardForm
+          boardId={id} // Pass the board ID to the form
+          onClose={() => setShowCreateForm(false)}
+          onCreate={handleCreateCard}
+        />
+      )}
+
+    </div>
   );
 };
 

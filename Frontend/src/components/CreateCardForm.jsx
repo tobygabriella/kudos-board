@@ -20,7 +20,7 @@ const CreateCardForm = ({boardId,  onClose, onCreate }) => {
   const handleSubmit = (e) => {
     e.preventDefault();
     const newCard = {
-        message: description,  // Correct field name
+        messsage: description,  // TO DO: Correct field name
         author: owner,
         boardId: parseInt(boardId),
         imgUrl:"https://picsum.photos/200/300?random=3"
