@@ -37,6 +37,21 @@ app.post('/boards', async (req, res) => {
     }
 });
 
+app.get('/boards', async (req, res) => {
+    try {
+        const boards = await prisma.kudoBoard.findMany({
+            orderBy: {
+                createdAt: 'desc'
+            },
+            take: 5
+        });
+        res.status(200).json(boards);
+    } catch (error) {
+        console.error('Error fetching boards:', error);
+        res.status(500).send('Error fetching boards');
+    }
+});
+
 app.get('/boards/:id', async (req, res) => {
     const { id } = req.params
     const boards = await prisma.kudoBoard.findUnique(
@@ -89,19 +104,20 @@ app.delete('/boards/:id', async (req, res) => {
     res.status(200).json(deleteBoard);
 })
 
-
-
 app.post('/boards/:id/cards', async (req, res) => {
     const {id} = req.params;
-    const { messsage, imgUrl, author} = req.body;
+    const {title, description, upvote,imgUrl, author} = req.body;
     console.log(req.body);
     try {
         const newCard = await prisma.kudoCard.create({
             data: {
-                messsage,    // TO DO: Correct field name
+                title,
+                description,
                 imgUrl,
                 author,
+                upvote,
                 board: { connect: { id: parseInt(id) } },
+
             }
         });
         res.status(201).json(newCard);
@@ -137,6 +153,23 @@ app.delete('/cards/:id', async (req, res) => {
     }
 });
 
+app.put('/cards/:id/upvote', async (req, res) => {
+    const { id } = req.params;
+    try {
+      const updatedCard = await prisma.kudoCard.update({
+        where: { id: parseInt(id) },
+        data: {
+          upvote: {
+            increment: 1
+          }
+        }
+      });
+      res.status(200).json(updatedCard);
+    } catch (error) {
+      console.error('Error upvoting card:', error);
+      res.status(500).json({ error: 'Failed to upvote card' });
+    }
+  });
 
 app.listen(port, ()=>{
     console.log(`Server is running at port ${port}`)

@@ -1,11 +1,9 @@
 import './HomePage.css';
 import { useState, useEffect} from 'react';
-// import { Route, Routes } from 'react-router-dom';
 import Header from './Header';
 import Banner from './Banner';
 import CreateBoardForm from './CreateBoardForm';
 import KudosBoard from './KudosBoard';
-// import BoardPage from './components/BoardPage';
 
 function HomePage() {
   const [boards, setBoards] = useState([]);
@@ -140,19 +138,13 @@ function HomePage() {
         console.error(`Error searching boards for query ${query}:`, error);
       });
   };
-  
 
   return (
     <>
       <Header />
-      <Banner openForm={handleOpenForm} setCategory={setSelectedCategory} setSearchQuery={setSearchQuery} />  
+      <Banner openForm={handleOpenForm} setCategory={setSelectedCategory} setSearchQuery={setSearchQuery} />
       {showCreateForm && <CreateBoardForm onClose={handleCloseForm} onCreate={handleCreateBoard}/>}
       <div className="boardContainer">{boardBox}</div>
-
-      {/* <Routes>
-        <Route path="/" element={<App />} />
-        <Route path="/boards/:id" element={<BoardPage />} />
-      </Routes> */}
     </>
   )
 }

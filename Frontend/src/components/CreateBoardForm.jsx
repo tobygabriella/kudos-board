@@ -12,7 +12,6 @@ const CreateBoardForm= ({onClose, onCreate}) => {
       title,
       category,
       author,
-      
     };
     onCreate(newBoard);
     onClose();

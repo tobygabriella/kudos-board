@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect} from 'react';
 import './CreateCardForm.css';
 
 const CreateCardForm = ({boardId,  onClose, onCreate }) => {
@@ -6,25 +6,29 @@ const CreateCardForm = ({boardId,  onClose, onCreate }) => {
   const [description, setDescription] = useState('');
   const [owner, setOwner] = useState('');
   const [searchQuery, setSearchQuery] = useState('');
-  const [message, setMessage] = useState('');
   const [gifs, setGifs] = useState([]);
   const [selectedGif, setSelectedGif] = useState('');
 
-//   const handleSearch = (searchQuery) => {
-//     fetch(`https://api.giphy.com/v1/gifs/search?api_key=${import.meta.env.VITE_GIPHY_API_KEY}&q=${searchQuery}&limit=10`)
-//       .then(response => response.json())
-//       .then(data => setGifs(data.data))
-//       .catch(error => console.error('Error fetching gifs:', error));
-//   };
+  const handleSearch = (searchQuery) => {
+    fetch(`https://api.giphy.com/v1/gifs/search?api_key=${import.meta.env.VITE_GIPHY_API_KEY}&q=${searchQuery}&limit=7`)
+      .then(response => response.json())
+      .then(data => setGifs(data.data))
+      .catch(error => console.error('Error fetching gifs:', error));
+  };
 
+  const handleSelectedGif = (gifUrl) =>{
+    setSelectedGif(gifUrl);
+    setGifs([]);
+  }
   const handleSubmit = (e) => {
     e.preventDefault();
     const newCard = {
-        messsage: description,  // TO DO: Correct field name
+        title:title,
+        description: description,
+        imgUrl:selectedGif,
         author: owner,
+        upvote:0,
         boardId: parseInt(boardId),
-        imgUrl:"https://picsum.photos/200/300?random=3"
-      // You may want to add the selected gif URL to the new card object
     };
     onCreate(newCard);
   };
@@ -53,11 +57,22 @@ const CreateCardForm = ({boardId,  onClose, onCreate }) => {
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
           />
+          <button type="button" onClick={()=> handleSearch(searchQuery)}>Search</button>
+          <div className="gifGrid">
+            {gifs.map(gif => (
+              <img
+                key={gif.id}
+                src={gif.images.fixed_height_small.url}
+                alt={gif.title}
+                onClick={() => handleSelectedGif(gif.images.fixed_height_small.url)}
+              />
+            ))}
+          </div>
           <input
             type="text"
-            placeholder="Enter Message"
-            value={message}
-            onChange={(e) => setMessage(e.target.value)}
+            placeholder="Gifurl"
+            value={selectedGif}
+            onChange={(e) => setSelectedGif(e.target.value)}
           />
           <input
             type="text"

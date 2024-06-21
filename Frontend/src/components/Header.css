@@ -2,17 +2,12 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    padding: 20px;
+    padding: 5px;
     background-color: #ffffff;
     border-bottom: 1px solid #eaeaea;
   }
-  
+
   .logo {
-    height: 50px;
+    height: 120px;
     margin-right: 10px;
-  }
-  
-  .title {
-    font-size: 24px;
-    color: #333333;
   }

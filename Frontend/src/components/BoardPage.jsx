@@ -11,6 +11,20 @@ const BoardPage = () => {
   const [cards, setCards] = useState([]);
   const [showCreateForm, setShowCreateForm] = useState(false);
 
+  const handleUpvote = (cardId) => {
+    fetch(`${import.meta.env.VITE_BACKEND_ADDRESS}/cards/${cardId}/upvote`, {
+      method: 'PUT',
+      headers: {
+        "Content-Type": "application/json",
+      },
+    })
+      .then(response => response.json())
+      .then(updatedCard => {
+        setCards(cards.map(card => card.id === cardId ? updatedCard : card));
+      })
+      .catch(error => console.error('Error upvoting card:', error));
+  };
+
   useEffect(() => {
     fetch(`${import.meta.env.VITE_BACKEND_ADDRESS}/boards/${id}`)
       .then(response => response.json())
@@ -82,9 +96,12 @@ const BoardPage = () => {
       id={card.id}
       boardId ={card.boardId}
       imageUrl={card.imgUrl}
-      message={card.message}
+      description={card.description}
+      title ={card.title}
       author= {card.author}
+      upvote={card.upvote}
       onDelete={() => handleDeleteCard(card.id)}
+      onUpvote={handleUpvote}
       />)
   })
 
