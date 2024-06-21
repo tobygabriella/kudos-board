@@ -203,3 +203,7 @@ app.get('/cards/:id/comment', async (req, res) => {
         res.status(500).json({ error: 'Failed to fetch comments' });
     }
 });
+
+
+app.listen(port, ()=>{
+  })
