@@ -1,9 +1,10 @@
 import './HomePage.css';
 import { useState, useEffect} from 'react';
-import Header from './Header';
-import Banner from './Banner';
-import CreateBoardForm from './CreateBoardForm';
-import KudosBoard from './KudosBoard';
+import Header from '../Header/Header';
+import Banner from '../Banner/Banner';
+import CreateBoardForm from '../CreateBoardForm/CreateBoardForm';
+import KudosBoard from '../KudoBoard/KudosBoard';
+import Footer from '../Footer/Footer';
 
 function HomePage() {
   const [boards, setBoards] = useState([]);
@@ -108,6 +109,13 @@ function HomePage() {
   }
 
   const fetchBoardsByCategory = (category) => {
+    if(category ==="recent"){
+      const sortedBoard = boards.sort((a,b) => b.id -a.id);
+      const lastThreeBoards = sortedBoard.slice(0,3)
+      setSelectedCategory(category)
+      setBoards(lastThreeBoards)
+    }
+    else{
     fetch(`${import.meta.env.VITE_BACKEND_ADDRESS}/boards/category/${category}`)
       .then(response => {
         if (!response.ok) {
@@ -121,8 +129,9 @@ function HomePage() {
       .catch(error => {
         console.error(`Error fetching boards for category ${category}:`, error);
       });
+    }
   };
-
+  
   const searchBoards = (query) => {
     fetch(`${import.meta.env.VITE_BACKEND_ADDRESS}/boards/search/${query}`)
       .then(response => {
@@ -145,6 +154,7 @@ function HomePage() {
       <Banner openForm={handleOpenForm} setCategory={setSelectedCategory} setSearchQuery={setSearchQuery} />
       {showCreateForm && <CreateBoardForm onClose={handleCloseForm} onCreate={handleCreateBoard}/>}
       <div className="boardContainer">{boardBox}</div>
+      <Footer/>
     </>
   )
 }

@@ -1,0 +1,30 @@
+.banner {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 15px 10px;
+    background-color: #f9f9f9;
+  }
+
+  .searchInput {
+    width: 60%;
+    padding: 10px;
+    font-size: 16px;
+    margin-bottom: 20px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+  }
+
+  .buttonContainer {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 20px;
+  }
+
+  .createBoardButton{
+    width: 20%;
+  }
+
+  .filterButton:hover {
+    background-color:black;
+  }

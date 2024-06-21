@@ -1,15 +1,49 @@
 import React, { useEffect, useState } from 'react';
 import { useParams, Link  } from 'react-router-dom';
 import './BoardPage.css';
-import CreateCardForm from './CreateCardForm';
-import KudoCard from './KudoCard';
-
+import CreateCardForm from '../CreateCardForm/CreateCardForm';
+import KudoCard from '../KudoCard/KudoCard';
+import CommentForm from '../CommentForm/CommentForm';
+import Footer from '../Footer/Footer';
 
 const BoardPage = () => {
   const { id } = useParams();
   const [board, setBoard] = useState(null);
   const [cards, setCards] = useState([]);
   const [showCreateForm, setShowCreateForm] = useState(false);
+  const [showCommentForm, setShowCommentForm] = useState(false);
+  const [currentCardId, setCurrentCardId] = useState(null);
+  const [loading, setLoading] = useState(true);
+
+  const handleOpenCommentForm = (cardId) => {
+    setCurrentCardId(cardId);
+    setShowCommentForm(true);
+  };
+
+  const handleCloseCommentForm = () => {
+    setShowCommentForm(false);
+    setCurrentCardId(null);
+  };
+
+  const handleCreateComment = (cardId, newComment) => {
+    fetch(`${import.meta.env.VITE_BACKEND_ADDRESS}/cards/${cardId}/comment`, {
+      method: 'POST',
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(newComment),
+    })
+      .then(response => {
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        return response.json();
+      })
+      .then(data => {
+        handleCloseCommentForm();
+      })
+      .catch(error => console.error('Error creating comment:', error));
+  };
 
   const handleUpvote = (cardId) => {
     fetch(`${import.meta.env.VITE_BACKEND_ADDRESS}/cards/${cardId}/upvote`, {
@@ -26,10 +60,17 @@ const BoardPage = () => {
   };
 
   useEffect(() => {
+    setLoading(true);
     fetch(`${import.meta.env.VITE_BACKEND_ADDRESS}/boards/${id}`)
       .then(response => response.json())
-      .then(data => setBoard(data))
-      .catch(error => console.error('Error fetching board:', error));
+      .then(data => {
+        setBoard(data);
+        setLoading(false);
+      })
+      .catch(error => {
+        console.error('Error fetching board:', error);
+        setLoading(false);
+      });
 
     fetchCards(id);
   }, [id]);
@@ -52,7 +93,6 @@ const BoardPage = () => {
             fetchCards(id);
           })
         .catch(error => console.error('Error creating card:', error));
-    console.log(newCard);
     setShowCreateForm(false);
   };
 
@@ -63,8 +103,12 @@ const BoardPage = () => {
       .catch(error => console.error('Error fetching cards:', error));
   }
 
-  if (!board) {
-    return <div>Loading...</div>;
+  if (loading) {
+    return (
+      <div className="spinnerContainer">
+        <div className="spinner"></div>
+      </div>
+    );
   }
 
   const handleDeleteCard = (id) => {
@@ -102,25 +146,33 @@ const BoardPage = () => {
       upvote={card.upvote}
       onDelete={() => handleDeleteCard(card.id)}
       onUpvote={handleUpvote}
+      onComment={() => handleOpenCommentForm(card.id)}
       />)
   })
 
   return (
-    <div className="board-page">
-      <Link to="/" className="back-button">&lt;</Link>
-      <h1 className="board-title">{board.title}</h1>
-      <button className="create-card-button" onClick={() => setShowCreateForm(true)}>Create a Card</button>
-      <div className="cards-container">
+    <div className="boardPage">
+      <Link to="/" className="backButton">&lt;</Link>
+      <h1 className="boardTitle">{board.title}</h1>
+      <button className="createCardButton" onClick={() => setShowCreateForm(true)}>Create a Card</button>
+      <div className="cardsContainer">
         {cardBox}
       </div>
       {showCreateForm && (
         <CreateCardForm
-          boardId={id} // Pass the board ID to the form
+          boardId={id}
           onClose={() => setShowCreateForm(false)}
           onCreate={handleCreateCard}
         />
       )}
-
+      {showCommentForm && (
+        <CommentForm
+          cardId={currentCardId}
+          onClose={handleCloseCommentForm}
+          onCreate={handleCreateComment}
+        />
+      )}
+      <Footer/>
     </div>
   );
 };

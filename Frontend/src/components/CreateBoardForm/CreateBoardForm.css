@@ -11,7 +11,7 @@
     backdrop-filter: blur(5px);
     z-index: 1000;
   }
-  
+
   .modal {
     background: white;
     padding: 20px;
@@ -22,7 +22,7 @@
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     position: relative;
   }
-  
+
   .closeButton {
     position: absolute;
     top: 10px;
@@ -32,32 +32,32 @@
     font-size: 24px;
     cursor: pointer;
   }
-  
+
   .createBoardButton {
     display: block;
     width: 100%;
     padding: 10px;
-    background-color: #007bff;
-    color: white;
+    color:white;
+    background-color:  #007bff;
     border: none;
     border-radius: 4px;
     cursor: pointer;
     font-size: 16px;
   }
-  
+
   .createBoardButton:hover {
     background-color: #0056b3;
   }
-  
+
   .formGroup {
     margin-bottom: 15px;
   }
-  
+
   .formGroup label {
     display: block;
     margin-bottom: 5px;
   }
-  
+
   .formGroup input,
   .formGroup select {
     width: 100%;

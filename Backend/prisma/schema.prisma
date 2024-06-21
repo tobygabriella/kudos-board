@@ -30,13 +30,15 @@ model KudoCard{
   author String
   boardId Int
   upvote Int @default(0)
-  board KudoBoard @relation(fields:[boardId], references:[id], onDelete: Cascade)
   comments Comment[]
+  board KudoBoard @relation(fields:[boardId], references:[id], onDelete: Cascade)
 }
 
 model Comment {
   id Int @id @default(autoincrement())
   content String
+  author String
+  createdAt DateTime @default(now())
   cardId Int
-  card KudoCard @relation(fields:[cardId], references:[id])
+  card KudoCard @relation(fields:[cardId], references:[id], onDelete: Cascade)
 }

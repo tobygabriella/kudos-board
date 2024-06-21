@@ -8,18 +8,31 @@ const port = 3000;
 app.use(express.json())
 app.use(cors());
 
-
 app.get('/boards', async (req, res) => {
     const boards = await prisma.kudoBoard.findMany()
     res.status(200).json(boards);
 });
 
+async function getGif(category){
+    const giphyResponse = await fetch(`https://api.giphy.com/v1/gifs/random?api_key=${process.env.GIPHY_API_KEY}&tag=${category&rating=g}`,
+    {
+        method: 'GET'
+        headers: {
+            'Content-Type':'application/json'
+        }
+    });
+    const giphyData = await giphyResponse.json();
+    const imageUrl = giphyData.data.images.original.url;
+    return gifUrl;
+
+}
 app.post('/boards', async (req, res) => {
     const { title, category, author, imgUrl} = req.body;
+    const imgUrl = await getGif(category);
     try{
-        const giphyResponse = await fetch(`https://api.giphy.com/v1/gifs/random?api_key=${process.env.GIPHY_API_KEY}`);
-        const giphyData = await giphyResponse.json();
-        const imageUrl = giphyData.data.images.original.url;
+        // const giphyResponse = await fetch(`https://api.giphy.com/v1/gifs/random?api_key=${process.env.GIPHY_API_KEY}`);
+        // const giphyData = await giphyResponse.json();
+        // const imageUrl = giphyData.data.images.original.url;
 
         const newBoard = await prisma.kudoBoard.create({
             data: {
@@ -83,7 +96,7 @@ app.get('/boards/search/:title', async (req, res) => {
             where: {
                 title: {
                     contains: title,
-                    mode: 'insensitive' // Case-insensitive search
+                    mode: 'insensitive'
                 }
             }
         });
@@ -170,6 +183,41 @@ app.put('/cards/:id/upvote', async (req, res) => {
       res.status(500).json({ error: 'Failed to upvote card' });
     }
   });
+
+  app.post('/cards/:id/comment', async (req, res) => {
+    const { id } = req.params;
+    const { content, author } = req.body;
+    try {
+        const newComment = await prisma.comment.create({
+            data: {
+                content,
+                author,
+                card: { connect: { id: parseInt(id) } }
+            }
+        });
+        res.status(201).json(newComment);
+    } catch (error) {
+        console.error('Error creating comment:', error);
+        res.status(500).json({ error: 'Failed to create comment' });
+    }
+});
+
+app.get('/cards/:id/comment', async (req, res) => {
+    const { id } = req.params;
+    try {
+        const comments = await prisma.comment.findMany({
+            where: { cardId: parseInt(id) },
+            orderBy: {
+                createdAt: 'asc' // You can change this to 'desc' to order by newest first
+            }
+        });
+        res.status(200).json(comments);
+    } catch (error) {
+        console.error('Error fetching comments:', error);
+        res.status(500).json({ error: 'Failed to fetch comments' });
+    }
+});
+
 
 app.listen(port, ()=>{
     console.log(`Server is running at port ${port}`)
