@@ -48,7 +48,14 @@ Deployed Application (optional): [https://kudos-board-frontend.onrender.com/]
 
 ### Walkthrough Video
 
-`<div style="position: relative; padding-bottom: 56.25%; height: 0;"><iframe src="https://www.loom.com/embed/4b9a6c0c3030485d87d67f68d842eb78?sid=996904fc-dbf8-41a9-bd43-0cbd663cbe3d" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen style="position: absolute; top: 0; left: 0; width: 100%; height: 100%;"></iframe></div>`
+`<div>
+    <a href="https://www.loom.com/share/4b9a6c0c3030485d87d67f68d842eb78">
+      <p>Website Features Walkthrough - Watch Video</p>
+    </a>
+    <a href="https://www.loom.com/share/4b9a6c0c3030485d87d67f68d842eb78">
+      <img style="max-width:300px;" src="https://cdn.loom.com/sessions/thumbnails/4b9a6c0c3030485d87d67f68d842eb78-with-play.gif">
+    </a>
+  </div>`
 
 ### Reflection
 
