@@ -61,16 +61,15 @@ Deployed Application (optional): [https://kudos-board-frontend.onrender.com/]
 
 * Did the topics discussed in your labs prepare you to complete the assignment? Be specific, which features in your weekly assignment did you feel unprepared to complete?
 
-Add your response here
+Yes, The classes were good and informative.
 
 * If you had more time, what would you have done differently? Would you have added additional features? Changed the way your project responded to a particular event, etc.
   
-Add your response here
+If i had more time, I would have implemented user authentication.
 
 * Reflect on your project demo, what went well? Were there things that maybe didn't go as planned? Did you notice something that your peer did that you would like to try next time?
 
-Add your response here
-
+I was able to understand how back end connects to the front end. What did not go as planned was I thought i would have time to complete all stretch feautures.
 
 ### Shout out
 
